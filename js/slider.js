@@ -1,0 +1,62 @@
+document.addEventListener("DOMContentLoaded", function () {
+
+    let index = 0;
+    let slides = document.querySelectorAll(".slide");
+
+    function showSlide(i) {
+        slides.forEach(slide => slide.classList.remove("active"));
+
+        index = (i + slides.length) % slides.length;
+
+        slides[index].classList.add("active");
+    }
+
+    function changeSlide(step) {
+        showSlide(index + step);
+    }
+
+    // AUTO SLIDE
+    setInterval(() => {
+        changeSlide(1);
+    }, 4000);
+
+    // BUTTONS (IMPORTANT)
+    window.changeSlide = changeSlide;
+
+});
+const cards = document.querySelectorAll(".service-card");
+
+cards.forEach(card => {
+    card.addEventListener("mousemove", (e) => {
+        let rect = card.getBoundingClientRect();
+
+        let x = e.clientX - rect.left;
+        let y = e.clientY - rect.top;
+
+        let centerX = rect.width / 2;
+        let centerY = rect.height / 2;
+
+        let rotateX = -(y - centerY) / 10;
+        let rotateY = (x - centerX) / 10;
+
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    });
+
+    card.addEventListener("mouseleave", () => {
+        card.style.transform = "rotateX(0) rotateY(0)";
+    });
+});
+const sections = document.querySelectorAll("section");
+
+window.addEventListener("scroll", () => {
+    sections.forEach(sec => {
+        let top = window.scrollY;
+        let offset = sec.offsetTop - 300;
+        let height = sec.offsetHeight;
+
+        if (top > offset && top < offset + height) {
+            sec.style.opacity = "1";
+            sec.style.transform = "translateY(0)";
+        }
+    });
+});
